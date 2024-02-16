@@ -4,11 +4,20 @@ import { AppService } from './app.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UsersModule } from './users/users.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
-    CacheModule.register({
-      isGlobal: true
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: async () => ({
+        store: await redisStore({
+          socket: {
+            host: 'localhost',
+            port: 6379,
+          },
+        })
+      }),
     }),
     ClientsModule.register([
       {

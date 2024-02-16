@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UsersService {
@@ -26,7 +27,7 @@ export class UsersService {
     ];
     await this.sleep(5000);
 
-    await this.cacheManager.set(key, users, { ttl: 10 });
+    await this.cacheManager.set(key, users, 1000 * 10);
     return users;
   }
 
